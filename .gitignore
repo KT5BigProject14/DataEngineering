@@ -1,0 +1,10 @@
+.env
+data/
+__pycache__/
+pdf_db/
+**.csv
+**.exe
+**.ipynb
+crawling 진행 과정
+**.txt
+upstage.py
