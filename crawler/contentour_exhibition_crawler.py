@@ -44,13 +44,13 @@ def make_dataset(urls: list):
         overview2 = soup.find_all('p')[2].text
         exhibition = {'title': title, 'overview': overview1 + ' ' + overview2,}
         
+        columns = ['시작일', '종료일', '국가', '분야/분류', '참가기업 수', '총 방문자 수', '전시장', '전시회 홈페이지']
         info1 = '\n'.join(soup.find_all('div', class_='kboard-aside')[0].text.replace('\n\n', '').split('\n')[:7])
         info2 = '전시회 홈페이지 ' + soup.find_all('div', class_='kboard-aside')[0].find_all('a')[0]['href']
         informations = info1 + '\n' + info2
         
-        for words in informations.split('\n'):
-            words = words.split()
-            exhibition[' '.join(words[:-1])] = words[-1]
+        for index in range(len(informations.split('\n'))):
+            exhibition[columns[index]] = informations.split('\n')[index].split(columns[index])[-1].strip()
                     
         contentour_exhibitions.append(exhibition)
         
