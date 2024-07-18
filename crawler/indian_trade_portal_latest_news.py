@@ -14,7 +14,7 @@ class IndianTradePortalLatestNewsCrawler:
         self.titles = []
         self.urls = []
         self.article_published_dates = []
-        
+
     def fetch_page(self):
         logging.info("Fetching the page content.")
         response = requests.get(self.url)
@@ -24,7 +24,7 @@ class IndianTradePortalLatestNewsCrawler:
         else:
             logging.error("Failed to fetch the page. Status code: %d", response.status_code)
             return None
-        
+
     def parse_page(self, html_content):
         logging.info("Parsing the page content.")
         soup = BeautifulSoup(html_content, 'html.parser')
@@ -34,7 +34,7 @@ class IndianTradePortalLatestNewsCrawler:
         self.urls = [row.find('a')['href'] for row in rows]
         self.article_published_dates = [row.find_all('td')[2].find('a').text for row in rows]
         logging.info("Page content parsed successfully.")
-        
+
     def save_to_csv(self):
         logging.info("Saving data to CSV.")
         df = pd.DataFrame({
@@ -44,7 +44,7 @@ class IndianTradePortalLatestNewsCrawler:
         })
         df.to_csv(self.output_path, index=False)
         logging.info("Data saved to CSV at %s.", self.output_path)
-        
+
     def run(self):
         html_content = self.fetch_page()
         if html_content:
@@ -52,7 +52,7 @@ class IndianTradePortalLatestNewsCrawler:
             self.save_to_csv()
         else:
             logging.error("No content to parse.")
-            
+
 
 # 사용 예시
 INDIAN_TRADE_PORTAL_LATEST_NEWS_URL = 'https://www.indiantradeportal.in/news.jsp?lang=0'

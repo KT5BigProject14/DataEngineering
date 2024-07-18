@@ -24,7 +24,7 @@ class GepExhibitionCrawler:
         options = webdriver.ChromeOptions()
         options.add_argument('headless')
         self.driver = webdriver.Chrome(options=options)
-        
+
     def stop_driver(self):
         if self.driver:
             logging.info("Stopping WebDriver.")
@@ -38,7 +38,7 @@ class GepExhibitionCrawler:
     def parse_page(self):
         logging.info("Parsing main page.")
         wait = WebDriverWait(self.driver, 10)
-        
+
         # '산업분야 더보기' 버튼 클릭
         more_button = wait.until(EC.element_to_be_clickable((By.XPATH, '//*[@id="searchForm"]/div/div[2]/div[1]/div[3]/div/div/div/div[2]/button')))
         more_button.click()
@@ -90,7 +90,7 @@ class GepExhibitionCrawler:
         # 전시회 URL 추출
         self.urls = self.extract_urls_from_page()
         logging.info(f"Extracted {len(self.urls)} URLs from the main page.")
-        
+
     def switch_to_new_window(self):
         logging.info("Switching to new window.")
         all_windows = self.driver.window_handles

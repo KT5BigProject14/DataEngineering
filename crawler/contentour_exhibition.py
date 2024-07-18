@@ -1,11 +1,10 @@
-import re
 import logging
 import requests
 import pandas as pd
 from bs4 import BeautifulSoup
 
-# 로깅 설정
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
 
 class ContentourExhibitionCrawler:
     def __init__(self, output_path):
@@ -88,6 +87,7 @@ class ContentourExhibitionCrawler:
         self.extract_exhibition_urls()
         self.make_dataset()
         logging.info("Crawler finished.")
+
 
 # 사용 예시
 OUTPUT_PATH = 'contentour_exhibitions.csv'

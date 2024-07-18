@@ -23,7 +23,7 @@ class FnBNewsCrawler:
         self.article_published_dates = []
         self.authors = []
         self.urls = []
-        
+
     def start_driver(self):
         logging.info("Starting WebDriver.")
         options = webdriver.ChromeOptions()
@@ -32,22 +32,22 @@ class FnBNewsCrawler:
         self.driver.get(self.url)
         time.sleep(3)
         logging.info("WebDriver started and navigated to the URL.")
-        
+
     def scrape_page(self):
         logging.info("Scraping page.")
         page_source = self.driver.page_source
         soup = BeautifulSoup(page_source, 'html.parser')
         tables = soup.find_all('div', id='ContentPlaceHolder1_UpdatePanel1')
-        
+
         for rows in tables:
             rows = rows.find_all('a')
             for row in rows:
                 if 'Top-News' in row['href']:
                     self.urls.append('https://www.fnbnews.com' + row['href'])
-                    
+
         for news_index in range(5):
             contents = soup.find_all('tr', id=f'ContentPlaceHolder1_lvPosts_Tr1_{news_index}')[0].text.replace('\n\n\n\n', '').strip().split('\n\n')
-            
+
             for index, content in enumerate(contents):
                 if index == 0:
                     self.titles.append(content.replace('\r\n', '')[1:].strip())
@@ -58,7 +58,7 @@ class FnBNewsCrawler:
                 else:
                     pass
         logging.info("Page scraping completed.")
-                    
+  
     def click_next(self):
         logging.info("Clicking next button.")
         wait = WebDriverWait(self.driver, 10)
@@ -66,7 +66,7 @@ class FnBNewsCrawler:
         next_button.click()
         time.sleep(5)
         logging.info("Navigated to next page.")
-        
+
     def fetch_page_contents(self):
         logging.info("Fetching page contents.")
         for url in self.urls:
@@ -74,7 +74,7 @@ class FnBNewsCrawler:
             soup = BeautifulSoup(response.text, 'html.parser')
             self.page_contents.append(soup.find('span', class_='breadcrumb').text)
         logging.info("Fetched all page contents.")
-            
+
     def save_to_csv(self):
         logging.info("Saving data to CSV.")
         df = pd.DataFrame(
@@ -90,24 +90,24 @@ class FnBNewsCrawler:
         df['article_published_date'] = pd.to_datetime(df['article_published_date'])
         df.to_csv(self.output_path, index=False)
         logging.info("Data saved to CSV at %s.", self.output_path)
-        
+
     def run(self):
         self.start_driver()
         count = self.max_count
-        
+
         while count > 0:
             self.scrape_page()
             count -= 5
             if count > 0:
                 self.click_next()
-                
+
         self.fetch_page_contents()
         self.save_to_csv()
         self.driver.quit()
         logging.info("Crawler run completed.")
-        
 
-# 사용 예시 
+
+# 사용 예시
 FNBNEWS_URL = 'https://www.fnbnews.com/Top-News'
 OUTPUT_PATH = 'india_FnBnews.csv'
 
