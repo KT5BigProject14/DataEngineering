@@ -6,5 +6,10 @@ pdf_db/
 **.exe
 **.ipynb
 crawling 진행 과정
-**.txt
+# **.txt
 upstage.py
+**.zip
+**.pkl
+generate_metadata
+before_refactoring_crawler_code
+.ipynb_checkpoints
